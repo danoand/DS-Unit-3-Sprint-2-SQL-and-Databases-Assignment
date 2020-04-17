@@ -147,22 +147,15 @@ print(f'\nQuestion #6 How many Weapons does each character have? (Return first 2
 print(tabulate(lst_char_inv_sorted[:20], headers="keys"))
 
 # Question #7 On average, how many Items does each Character have?
-pipeline = [
-    {"$group": {"_id": "$character_id", "average": {"$avg": 1}}}
-]
-
-# Aggregate characters by the number of items they possess
-lst_char_inv = list(db_mg.charactercreator_character_inventory.aggregate(pipeline))
-lst_char_inv_sorted = sorted(lst_char_inv, key = lambda i: i['_id'], reverse=True)
-
-print(f'\nQuestion #7 On average, how many Items does each Character have?\n)')
-print(tabulate(lst_char_inv, headers="keys"))
-
-# Question #8 On average, how many Weapons does each character have?
-
 num_items = db_mg.charactercreator_character_inventory.count_documents({})
 num_chars = len(db_mg.charactercreator_character.distinct("character_id"))
-print(f'\nQuestion #8 On average, how many Weapons does each character have?\nAverage number of items per character: {round((num_items/num_chars), 2)}')
+print(f'\nQuestion #7 On average, how many Items does each Character have?\nAverage number of items per character: {round((num_items/num_chars), 2)}')
 
+# Question #8 On average, how many Weapons does each character have?
+num_wpns = db_mg.armory_weapon.count_documents({})
+num_chars = len(db_mg.charactercreator_character.distinct("character_id"))
+print(f'\nQuestion #8 On average, how many Weapons does each character have?\nAverage number of weapons per character: {round((num_wpns/num_chars), 2)}')
+
+# Close the database connection
 clnt_mg.close()
 exit()
